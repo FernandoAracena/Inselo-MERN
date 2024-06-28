@@ -174,8 +174,8 @@ app.post('/booking-return', async (req, res) => {
             name: req.body.name,
             address: req.body.address,
             packageSize: req.body.packageSize,
-            qrcode: response.consignments[0].confirmation.links.labels,
-            trackingCode: response.consignments[0].confirmation.links.tracking,
+            qrcode: res.consignments[0].confirmation.links.labels,
+            trackingCode: res.consignments[0].confirmation.links.tracking,
         });
 
         await newBooking.save();
