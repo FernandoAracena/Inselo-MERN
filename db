@@ -1,0 +1,59 @@
+# Sjekk om det allerede finnes saker i databasen
+saker = db["saker"]
+if saker.count_documents({}) == 0:
+    # Last opp lydfiler til GridFS
+    audio_file1_id = fs.put(open(
+        r"C:\Users\Bruker\Documents\Soulseek Downloads\complete\01 - Speak To Me-Breathe.wav", "rb"), filename="speak_to_me.wav")
+    audio_file2_id = fs.put(open(r"C:\Users\Bruker\Documents\Soulseek Downloads\complete\Pink Floyd - Shine On You Crazy Diamond.wav",
+                            "rb"), filename="shine_on_you_crazy_diamond.wav")
+
+    # Last opp transkripsjonsdokument og dialogutskrift-dokument
+    transkripsjonsdokument_id = fs.put(open(
+        r"C:\Users\Bruker\Desktop\Søknad og CV\CVFernandoAracena.pdf", "rb"), filename="transkripsjon.pdf") if os.path.exists(r"C:\Users\Bruker\Documents\transkripsjon.pdf") else None
+    dialogutskrift_dokument_id = fs.put(open(
+        r"C:\Users\Bruker\Desktop\Søknad og CV\hva_er_viktig_i_jobben_skrivbar.pdf", "rb"), filename="dialogutskrift.pdf") if os.path.exists(r"C:\Users\Bruker\Documents\dialogutskrift.pdf") else None
+
+    saker.insert_many([
+        {
+            "dato": "2024-08-19",
+            "kl": "09:00",
+            "hvem_i_rettsalen": "Dommer, Aktor, Forsvarer",
+            "tema": "Innhenting av bevis",
+            "transkribert": "Ja",
+            "dialogutskrift": "Ja",
+            "kontrollert": "Nei",
+            "distribuert": "Nei",
+            "ansvarlig": "John Doe",
+            "audio_file_id": audio_file1_id,  # Referanse til GridFS ID
+            "transkripsjonsdokument_id": transkripsjonsdokument_id,  # Referanse til GridFS ID
+            "dialogutskrift_dokument_id": dialogutskrift_dokument_id  # Referanse til GridFS ID
+        },
+        {
+            "dato": "2024-08-20",
+            "kl": "10:00",
+            "hvem_i_rettsalen": "Dommer, Vitne, Forsvarer",
+            "tema": "Vitneforklaring",
+            "transkribert": "Nei",
+            "dialogutskrift": "Nei",
+            "kontrollert": "Nei",
+            "distribuert": "Nei",
+            "ansvarlig": "Jane Doe",
+            "audio_file_id": audio_file2_id,  # Referanse til GridFS ID
+            "transkripsjonsdokument_id": transkripsjonsdokument_id,
+            "dialogutskrift_dokument_id": dialogutskrift_dokument_id
+        },
+        {
+            "dato": "2024-08-21",
+            "kl": "11:00",
+            "hvem_i_rettsalen": "Dommer, Vitne, Forsvarer",
+            "tema": "Vitneforklaring",
+            "transkribert": "Nei",
+            "dialogutskrift": "Ja",
+            "kontrollert": "Nei",
+            "distribuert": "Nei",
+            "ansvarlig": "Jane Doe",
+            "audio_file_id": audio_file2_id,  # Referanse til GridFS ID
+            "transkripsjonsdokument_id": transkripsjonsdokument_id,
+            "dialogutskrift_dokument_id": dialogutskrift_dokument_id
+        }
+    ])
